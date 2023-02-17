@@ -1,4 +1,8 @@
-import { GLTFSample } from "./samples/gltf-sample"
+import { MusehumApp } from "./musehum-app"
 
-const app = new GLTFSample();
+const app = new MusehumApp();
 document.body.appendChild(app.renderer.domElement);
+
+function test() {
+    console.log("test");
+}
