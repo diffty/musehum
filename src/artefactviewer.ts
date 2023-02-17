@@ -48,9 +48,29 @@ export class ArtefactViewer extends THREE.Group {
         artefact.load((a: ArtefactBase) => { this.onArtefactLoadEnd(a); });
     }
 
-    nextArtefact() {
+    prevArtefact() {
+        if (this.currArtefact) {
+            this.currArtefact.unload();
+        }
+        
         const currArtefactIdx = this.artefacts.indexOf(this.currArtefact);
-        this.currArtefact = this.artefacts[0]
-        this.loadArtefact(this.artefacts[(currArtefactIdx+1) % this.artefacts.length])
+        
+        if (currArtefactIdx - 1 < 0) {
+            this.currArtefact = this.artefacts[(this.artefacts.length-1)];
+        }
+        else {
+            this.currArtefact = this.artefacts[currArtefactIdx - 1];
+        }
+
+        this.loadArtefact(this.currArtefact);
+    }
+
+    nextArtefact() {
+        if (this.currArtefact) {
+            this.currArtefact.unload();
+        }
+        const currArtefactIdx = this.artefacts.indexOf(this.currArtefact);
+        this.currArtefact = this.artefacts[(currArtefactIdx+1) % this.artefacts.length];
+        this.loadArtefact(this.currArtefact);
     }
 }
