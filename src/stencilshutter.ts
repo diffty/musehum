@@ -1,37 +1,68 @@
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 
 export class StencilShutter extends THREE.Group {
-    planes: THREE.Mesh[];
+    mainPlane: THREE.Mesh;
+    topPlane: THREE.Mesh;
+    leftEdge: THREE.Group;
+    rightEdge: THREE.Group;
+    topGroup: THREE.Group;
 
-    constructor(nbStencilIds: number, startIdShift?: number) {
+    constructor() {
         super();
 
-        if (startIdShift == undefined) {
-            startIdShift = 1;
-        }
+        const planeGeometry = new THREE.PlaneGeometry(1, 1);
 
-        this.planes = []
+        const planesWidth = window.innerWidth / window.innerHeight;
 
-        for (let i = 1; i <= Math.max(4, nbStencilIds); i++) {
-            const planeGeometry = new THREE.PlaneGeometry(1, 1);
-            const planeMaterial = new THREE.MeshBasicMaterial({});
+        this.mainPlane = new THREE.Mesh(planeGeometry, this.makeStencilMaterial(1));
+        this.mainPlane.scale.set(planesWidth, 1, this.mainPlane.scale.z);
 
-            let stencilId = ((i-1-startIdShift) % nbStencilIds) + 1;
-            if (stencilId < 1) stencilId = nbStencilIds;
+        this.topGroup = new THREE.Group();
 
-            planeMaterial.depthWrite = false;
-            planeMaterial.stencilWrite = true;
-            planeMaterial.stencilRef = stencilId;
-            planeMaterial.stencilFunc = THREE.AlwaysStencilFunc;
-            planeMaterial.stencilZPass = THREE.ReplaceStencilOp;
+        this.topPlane = new THREE.Mesh(planeGeometry, this.makeStencilMaterial(2));
+        this.topPlane.scale.set(planesWidth, 1, this.mainPlane.scale.z);
+        this.topPlane.renderOrder = 0;
 
-            const newPlane = new THREE.Mesh(planeGeometry, planeMaterial);
-            newPlane.translateX(((i-1-startIdShift) * 1));
-            newPlane.scale.set(window.innerWidth / window.innerHeight, 1, newPlane.scale.z);
+        this.topGroup.add(this.topPlane);
 
-            this.planes.push(newPlane)
-            this.add(newPlane);
-        }
+        this.add(this.mainPlane);
+        this.add(this.topGroup);
+        
+        const gltfLoader = new GLTFLoader();
+
+        gltfLoader.load(
+            "./mask-edge.gltf",
+            (gltf) => {
+                gltf.scene.traverse((o: THREE.Object3D) => {
+                    if (o instanceof THREE.Mesh) {
+                        o.material = this.topPlane.material;
+                    }
+                });
+
+                this.leftEdge = gltf.scene;
+                this.rightEdge = this.leftEdge.clone();
+
+                this.topGroup.add(this.leftEdge);
+                this.topGroup.add(this.rightEdge);
+                
+                this.leftEdge.position.set(-planesWidth * 0.5, 0, 0);
+                this.rightEdge.position.set(planesWidth * 0.5, 0, 0);
+                this.rightEdge.rotateZ(Math.PI);
+
+            });
+    }
+
+    makeStencilMaterial(stencilId: number) {
+        const planeMaterial = new THREE.MeshBasicMaterial({
+            depthWrite: false,
+            stencilWrite: true,
+            stencilRef: stencilId,
+            stencilFunc: THREE.AlwaysStencilFunc,
+            stencilZPass: THREE.ReplaceStencilOp,
+        });
+
+        return planeMaterial
     }
 }

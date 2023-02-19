@@ -113,48 +113,33 @@ export class ArtefactViewer extends THREE.Group {
     }
 
     onDrag(moveDelta: THREE.Vector2) {
-        this.shutter.translateX(moveDelta.x);
+        this.shutter.topGroup.translateX(moveDelta.x);
 
-        const firstPlane = this.shutter.planes[0];
-        const lastPlane = this.shutter.planes[this.shutter.planes.length-1];
+        const edgeSize = 0.050;
         
-        console.log(this.shutter.position.x);
-
-        const p = firstPlane;
-        
-        if (this.shutter.position.x < -p.scale.x) {
-            firstPlane.translateX(lastPlane.position.x - firstPlane.position.x + p.scale.x);
-            this.shutter.translateX(-this.shutter.position.x);
-            const firstPlaneToRelocate = this.shutter.planes.shift();
-            
-            if (firstPlaneToRelocate) {
-                this.shutter.planes.push(firstPlaneToRelocate);
-            }
-
-            this.shutter.planes.forEach((p) => {
-                p.translateX(-p.scale.x);
-            })
+        if (this.shutter.topGroup.position.x > this.shutter.mainPlane.scale.x + edgeSize + 0.001) {
+            this.shutter.topGroup.position.set(
+                -(this.shutter.mainPlane.scale.x + edgeSize),
+                0,
+                0,
+            )
         }
-        else if (this.shutter.position.x > p.scale.x) {
-            lastPlane.translateX(firstPlane.position.x - lastPlane.position.x - p.scale.x);
-            this.shutter.translateX(-this.shutter.position.x);
-            const lastPlaneToRelocate = this.shutter.planes.pop();
-            
-            if (lastPlaneToRelocate) {
-                this.shutter.planes.unshift(lastPlaneToRelocate);
-            }
-
-            this.shutter.planes.forEach((p) => {
-                p.translateX(p.scale.x);
-            })
+        else if (this.shutter.topGroup.position.x < -(this.shutter.mainPlane.scale.x + edgeSize + 0.001)) {
+            this.shutter.topGroup.position.set(
+                this.shutter.mainPlane.scale.x + edgeSize,
+                0,
+                0,
+            )
         }
     }
 
     onWindowResize() {
         const ratio = (window.innerWidth / window.innerHeight);
         
-        this.shutter.planes.forEach((p) => {
-            p.scale.set(window.innerWidth / window.innerHeight, 1, p.scale.z);
-        })
+        this.shutter.mainPlane.scale.set(ratio, 1, this.shutter.mainPlane.scale.z);
+        this.shutter.topPlane.scale.set(ratio, 1, this.shutter.mainPlane.scale.z);
+
+        this.shutter.leftEdge.position.set(-ratio * 0.5, 0, 0);
+        this.shutter.rightEdge.position.set(ratio * 0.5, 0, 0);
     }
 }

@@ -33,7 +33,7 @@ export class MusehumApp extends App {
 
         this.scene.add(this.viewer);
 
-        this.camera.translateZ(1);
+        this.camera.translateZ(0.65);
 
         window.addEventListener("resize", () => { this.onWindowResize() });
     }
