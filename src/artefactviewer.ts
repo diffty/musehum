@@ -6,10 +6,12 @@ import { ArtefactData } from "./artefactdata";
 export class ArtefactViewer extends THREE.Group {
     artefacts: Array<ArtefactBase>;
     currArtefact: ArtefactBase;
+    artefactsToLoad: number; 
 
     constructor() {
         super();
         this.artefacts = [];
+        this.artefactsToLoad = 2;
 
         this.loadArtefactsDataFromUrl("artefacts.json");
     }
@@ -36,16 +38,41 @@ export class ArtefactViewer extends THREE.Group {
 
         if (this.artefacts.length > 0) {
             this.currArtefact = this.artefacts[0]
-            this.loadArtefact(this.currArtefact);
+            
+            for (let i = 0; i < Math.min(this.artefactsToLoad, this.artefacts.length); i++) {
+                this.loadArtefact(this.artefacts[i])
+                    .then((a: ArtefactBase) => {
+                        this.showArtefact(a); // Attention on affiche tout là
+                    });
+                this.artefacts[i].visible = false;
+            }
+            
+            this.currArtefact.visible = true;
         }
     }
 
-    onArtefactLoadEnd(artefact: ArtefactBase) {
-        this.add(artefact);
+    loadArtefact(artefact: ArtefactBase): Promise<ArtefactBase> {
+        return new Promise<ArtefactBase>(resolve => {
+            artefact.load((a: ArtefactBase) => {
+                this.add(artefact);
+                resolve(a);
+            });
+        });
     }
 
-    loadArtefact(artefact: ArtefactBase) {
-        artefact.load((a: ArtefactBase) => { this.onArtefactLoadEnd(a); });
+    showArtefact(artefact: ArtefactBase, stencilId?: number) {
+        if (!artefact.isLoaded()) {
+            throw `Trying to show this unloaded artefact ${artefact.name}`;
+        }
+
+        artefact.visible = true;
+
+        if (!stencilId) {
+            stencilId = this.getArtefactStencilId(artefact);
+            console.log(stencilId);
+        }
+
+        artefact.setStencilId(stencilId);
     }
 
     prevArtefact() {
@@ -62,7 +89,7 @@ export class ArtefactViewer extends THREE.Group {
             this.currArtefact = this.artefacts[currArtefactIdx - 1];
         }
 
-        this.loadArtefact(this.currArtefact);
+        this.showArtefact(this.currArtefact);
     }
 
     nextArtefact() {
@@ -71,6 +98,12 @@ export class ArtefactViewer extends THREE.Group {
         }
         const currArtefactIdx = this.artefacts.indexOf(this.currArtefact);
         this.currArtefact = this.artefacts[(currArtefactIdx+1) % this.artefacts.length];
-        this.loadArtefact(this.currArtefact);
+        this.showArtefact(this.currArtefact);
+    }
+
+    getArtefactStencilId(artefact: ArtefactBase) {
+        const artefactIdx = this.artefacts.indexOf(artefact);
+        return (artefactIdx % 2) + 1;
+    }
     }
 }
