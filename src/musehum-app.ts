@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { App } from "./app"
 import { ArtefactViewer } from "./artefactviewer"
 
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 
 export class MusehumApp extends App {
@@ -12,12 +12,16 @@ export class MusehumApp extends App {
     viewer: ArtefactViewer;
 
     init() {
-        console.log("testtt");
-
         this.viewer = new ArtefactViewer();
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-        
+        this.renderer.setClearColor(0xC0C0C0);
+
+        const orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
+        orbitControls.mouseButtons = {
+            MIDDLE: THREE.MOUSE.ROTATE,
+        }
+
         this.dirLight = new THREE.DirectionalLight(0xFFFFFF, 1);
         this.ambLight = new THREE.AmbientLight(0xFFFFFF, 0.8);
 
@@ -30,11 +34,24 @@ export class MusehumApp extends App {
         this.scene.add(this.viewer);
 
         this.camera.translateZ(1);
+
+        window.addEventListener("resize", () => { this.onWindowResize() });
     }
 
     update(deltaTime: number) {
         if (this.obj) {
             this.obj.rotateY(deltaTime * 2.5);
         }
+    }
+
+    onDrag(moveDelta: THREE.Vector2): void {
+        this.viewer.onDrag(moveDelta);
+    }
+
+    onWindowResize() {
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.viewer.onWindowResize();
     }
 }

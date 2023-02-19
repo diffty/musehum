@@ -105,5 +105,6 @@ export class ArtefactViewer extends THREE.Group {
         const artefactIdx = this.artefacts.indexOf(artefact);
         return (artefactIdx % 2) + 1;
     }
+    onWindowResize() {
     }
 }
