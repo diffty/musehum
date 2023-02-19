@@ -2,11 +2,14 @@ import * as THREE from "three";
 import { readTextFile } from "./utils";
 import { ArtefactBase } from "./artefactbase";
 import { ArtefactData } from "./artefactdata";
+import { StencilShutter } from "./stencilshutter";
+
 
 export class ArtefactViewer extends THREE.Group {
     artefacts: Array<ArtefactBase>;
     currArtefact: ArtefactBase;
     artefactsToLoad: number; 
+    shutter: StencilShutter;
 
     constructor() {
         super();
@@ -14,6 +17,9 @@ export class ArtefactViewer extends THREE.Group {
         this.artefactsToLoad = 2;
 
         this.loadArtefactsDataFromUrl("artefacts.json");
+
+        this.shutter = new StencilShutter(2);
+        this.add(this.shutter);
     }
 
     loadArtefactsDataFromUrl(url: string) {
@@ -105,6 +111,50 @@ export class ArtefactViewer extends THREE.Group {
         const artefactIdx = this.artefacts.indexOf(artefact);
         return (artefactIdx % 2) + 1;
     }
+
+    onDrag(moveDelta: THREE.Vector2) {
+        this.shutter.translateX(moveDelta.x);
+
+        const firstPlane = this.shutter.planes[0];
+        const lastPlane = this.shutter.planes[this.shutter.planes.length-1];
+        
+        console.log(this.shutter.position.x);
+
+        const p = firstPlane;
+        
+        if (this.shutter.position.x < -p.scale.x) {
+            firstPlane.translateX(lastPlane.position.x - firstPlane.position.x + p.scale.x);
+            this.shutter.translateX(-this.shutter.position.x);
+            const firstPlaneToRelocate = this.shutter.planes.shift();
+            
+            if (firstPlaneToRelocate) {
+                this.shutter.planes.push(firstPlaneToRelocate);
+            }
+
+            this.shutter.planes.forEach((p) => {
+                p.translateX(-p.scale.x);
+            })
+        }
+        else if (this.shutter.position.x > p.scale.x) {
+            lastPlane.translateX(firstPlane.position.x - lastPlane.position.x - p.scale.x);
+            this.shutter.translateX(-this.shutter.position.x);
+            const lastPlaneToRelocate = this.shutter.planes.pop();
+            
+            if (lastPlaneToRelocate) {
+                this.shutter.planes.unshift(lastPlaneToRelocate);
+            }
+
+            this.shutter.planes.forEach((p) => {
+                p.translateX(p.scale.x);
+            })
+        }
+    }
+
     onWindowResize() {
+        const ratio = (window.innerWidth / window.innerHeight);
+        
+        this.shutter.planes.forEach((p) => {
+            p.scale.set(window.innerWidth / window.innerHeight, 1, p.scale.z);
+        })
     }
 }
