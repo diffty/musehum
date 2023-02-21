@@ -8,6 +8,10 @@ export class StencilShutter extends THREE.Group {
     leftEdge: THREE.Group;
     rightEdge: THREE.Group;
     topGroup: THREE.Group;
+    shutterPosition: number;
+    shutterTargetPosition: number;
+    animTarget: number;
+    animValue: number;
 
     constructor() {
         super();
@@ -26,6 +30,14 @@ export class StencilShutter extends THREE.Group {
         this.topPlane.renderOrder = 0;
 
         this.topGroup.add(this.topPlane);
+
+        this.shutterPosition = 0;
+        this.shutterTargetPosition = 0;
+
+        this.animTarget = -1;
+        this.animValue = -1;
+
+        this.setShutterPosition(-1);
 
         this.add(this.mainPlane);
         this.add(this.topGroup);
@@ -54,6 +66,43 @@ export class StencilShutter extends THREE.Group {
             });
     }
 
+    getShutterPosition() {
+        const edgeSize = 0.050;
+        return this.topGroup.position.x / (this.mainPlane.scale.x + edgeSize);
+    }
+
+    setShutterPosition(newX: number) {
+        const edgeSize = 0.050;
+
+        // Alter input value so it loops
+        if (newX < -1) {
+            newX += (Math.floor(Math.abs((newX-1) / 2))) * 2
+        }
+        else {
+            newX = ((newX + 1) % 2) - 1;
+        }
+
+        this.topGroup.position.set(newX * (this.mainPlane.scale.x + edgeSize), 0, 0);
+    }
+
+    update(deltaTime: number) {
+        const speed = 5;
+
+            const moveValue = (this.animTarget - this.animValue) * deltaTime * speed;
+            //this.translateX(moveValue);
+            this.animValue += moveValue;
+            
+            if (Math.abs(this.animTarget - this.animValue) < 0.001) {
+                //this.translateX(this.animTarget - this.animValue);
+                //this.animTarget = ((this.animTarget + 1) % 2) - 1;
+                this.animValue = this.animTarget;
+            }
+
+            //console.log(`${this.animValue} | ${this.animTarget}`)
+
+            this.setShutterPosition(this.animValue);
+    }
+
     makeStencilMaterial(stencilId: number) {
         const planeMaterial = new THREE.MeshBasicMaterial({
             depthWrite: false,
@@ -65,4 +114,13 @@ export class StencilShutter extends THREE.Group {
 
         return planeMaterial
     }
+
+    moveLeft() {
+        this.animTarget += 1;
+    }
+
+    moveRight() {
+        this.animTarget -= 1;
+    }
+
 }

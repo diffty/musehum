@@ -10,15 +10,17 @@ export class ArtefactViewer extends THREE.Group {
     currArtefact: ArtefactBase;
     artefactsToLoad: number; 
     shutter: StencilShutter;
+    currStencilId: number;
 
     constructor() {
         super();
         this.artefacts = [];
         this.artefactsToLoad = 2;
+        this.currStencilId = 1;
 
         this.loadArtefactsDataFromUrl("artefacts.json");
 
-        this.shutter = new StencilShutter(2);
+        this.shutter = new StencilShutter();
         this.add(this.shutter);
     }
 
@@ -45,15 +47,17 @@ export class ArtefactViewer extends THREE.Group {
         if (this.artefacts.length > 0) {
             this.currArtefact = this.artefacts[0]
             
-            for (let i = 0; i < Math.min(this.artefactsToLoad, this.artefacts.length); i++) {
+            for (let i = 0; i < this.artefacts.length /*Math.min(this.artefactsToLoad, this.artefacts.length)*/; i++) {
+                this.artefacts[i].visible = false;
+
                 this.loadArtefact(this.artefacts[i])
                     .then((a: ArtefactBase) => {
-                        this.showArtefact(a); // Attention on affiche tout là
+                        if (a == this.currArtefact) {
+                            this.showArtefact(a, this.currStencilId);
+                        }
+                        //this.showArtefact(a, (i % 2) + 1); // Attention on affiche tout là
                     });
-                this.artefacts[i].visible = false;
             }
-            
-            this.currArtefact.visible = true;
         }
     }
 
@@ -73,19 +77,20 @@ export class ArtefactViewer extends THREE.Group {
 
         artefact.visible = true;
 
-        if (!stencilId) {
-            stencilId = this.getArtefactStencilId(artefact);
-            console.log(stencilId);
+        if (stencilId != undefined) {
+            artefact.setStencilId(stencilId);
         }
+    }
 
-        artefact.setStencilId(stencilId);
+    hideArtefact(artefact: ArtefactBase) {
+        artefact.visible = false;
+    }
+
+    update(deltaTime: number) {
+        this.shutter.update(deltaTime);
     }
 
     prevArtefact() {
-        if (this.currArtefact) {
-            this.currArtefact.unload();
-        }
-        
         const currArtefactIdx = this.artefacts.indexOf(this.currArtefact);
         
         if (currArtefactIdx - 1 < 0) {
@@ -95,16 +100,37 @@ export class ArtefactViewer extends THREE.Group {
             this.currArtefact = this.artefacts[currArtefactIdx - 1];
         }
 
-        this.showArtefact(this.currArtefact);
+        this.currStencilId--;
+
+        if (this.currStencilId < 1) {
+            this.currStencilId = 2;
+        }
+
+        this.artefacts.forEach((a) => {
+            if (a.stencilId == this.currStencilId) {
+                this.hideArtefact(a);
+            }
+        })
+
+        this.showArtefact(this.currArtefact, this.currStencilId);
+
+        this.shutter.moveLeft();
     }
 
     nextArtefact() {
-        if (this.currArtefact) {
-            this.currArtefact.unload();
-        }
         const currArtefactIdx = this.artefacts.indexOf(this.currArtefact);
         this.currArtefact = this.artefacts[(currArtefactIdx+1) % this.artefacts.length];
-        this.showArtefact(this.currArtefact);
+        this.currStencilId = ((this.currStencilId) % 2)+1
+        
+        this.artefacts.forEach((a) => {
+            if (a.stencilId == this.currStencilId) {
+                this.hideArtefact(a);
+            }
+        })
+
+        this.showArtefact(this.currArtefact, this.currStencilId);
+
+        this.shutter.moveRight();
     }
 
     getArtefactStencilId(artefact: ArtefactBase) {
@@ -113,24 +139,7 @@ export class ArtefactViewer extends THREE.Group {
     }
 
     onDrag(moveDelta: THREE.Vector2) {
-        this.shutter.topGroup.translateX(moveDelta.x);
-
-        const edgeSize = 0.050;
-        
-        if (this.shutter.topGroup.position.x > this.shutter.mainPlane.scale.x + edgeSize + 0.001) {
-            this.shutter.topGroup.position.set(
-                -(this.shutter.mainPlane.scale.x + edgeSize),
-                0,
-                0,
-            )
-        }
-        else if (this.shutter.topGroup.position.x < -(this.shutter.mainPlane.scale.x + edgeSize + 0.001)) {
-            this.shutter.topGroup.position.set(
-                this.shutter.mainPlane.scale.x + edgeSize,
-                0,
-                0,
-            )
-        }
+        this.shutter.setShutterPosition(this.shutter.getShutterPosition() + moveDelta.x);
     }
 
     onWindowResize() {
