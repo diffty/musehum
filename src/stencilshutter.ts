@@ -110,6 +110,8 @@ export class StencilShutter extends THREE.Group {
             stencilRef: stencilId,
             stencilFunc: THREE.AlwaysStencilFunc,
             stencilZPass: THREE.ReplaceStencilOp,
+            color: 0x000000,
+            colorWrite: false
         });
 
         return planeMaterial

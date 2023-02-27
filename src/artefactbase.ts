@@ -19,16 +19,16 @@ export class ArtefactBase extends THREE.Group {
         this.data = artefactData;
         this.stencilId = 0;
 
-        const testBGGeo = new THREE.PlaneGeometry();
+        /*const testBGGeo = new THREE.PlaneGeometry();
         this.testBGMat = new THREE.MeshBasicMaterial({color: new THREE.Color(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1))});
         const testBGMesh = new THREE.Mesh(testBGGeo, this.testBGMat);
         
         this.testBGMat.stencilWrite = true;
         this.testBGMat.stencilRef = this.stencilId;
         testBGMesh.scale.set(100, 100, 100);
-        testBGMesh.translateZ(-20);
+        testBGMesh.translateZ(-20);*/
 
-        this.add(testBGMesh);
+        //this.add(testBGMesh);
     }
 
     load(onLoadingEndCallback?: (artefact: ArtefactBase) => void) {
@@ -75,8 +75,8 @@ export class ArtefactBase extends THREE.Group {
                 }
             })
         }
-        this.testBGMat.stencilWrite = true;
-        this.testBGMat.stencilRef = this.stencilId;
-        this.testBGMat.stencilFunc = THREE.EqualStencilFunc;
+        //this.testBGMat.stencilWrite = true;
+        //this.testBGMat.stencilRef = this.stencilId;
+        //this.testBGMat.stencilFunc = THREE.EqualStencilFunc;
     }
 }

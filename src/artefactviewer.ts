@@ -11,12 +11,14 @@ export class ArtefactViewer extends THREE.Group {
     artefactsToLoad: number; 
     shutter: StencilShutter;
     currStencilId: number;
+    rotateSpeed: number;
 
-    constructor() {
+    constructor(rotateSpeed?: number) {
         super();
         this.artefacts = [];
         this.artefactsToLoad = 2;
         this.currStencilId = 1;
+        this.rotateSpeed = (rotateSpeed != undefined) ? rotateSpeed : 5;
 
         this.loadArtefactsDataFromUrl("artefacts.json");
 
@@ -139,7 +141,8 @@ export class ArtefactViewer extends THREE.Group {
     }
 
     onDrag(moveDelta: THREE.Vector2) {
-        this.shutter.setShutterPosition(this.shutter.getShutterPosition() + moveDelta.x);
+        // this.shutter.setShutterPosition(this.shutter.getShutterPosition() + moveDelta.x);
+        this.currArtefact.obj?.rotateY(moveDelta.x * this.rotateSpeed);
     }
 
     onWindowResize() {
