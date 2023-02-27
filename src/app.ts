@@ -13,7 +13,7 @@ export class App {
     pointerDragStart: THREE.Vector2;
     isFirstTouchFrame: boolean;
 
-    constructor() {
+    constructor(canvasDomElement?: HTMLElement) {
         this.then = 0.;
 
         // Event handling
@@ -31,7 +31,10 @@ export class App {
 
         this.scene = new THREE.Scene();
 
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({
+            canvas: canvasDomElement,
+            alpha: true
+        });
         this.renderer.setClearColor(0x000000, 0);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -85,7 +88,7 @@ export class App {
         // Override this method to customize behavior when a touch/click action ends
     }
 
-    onPointerMove( event ) {
+    onPointerMove(event: TouchEvent) {
         // calculate pointer position in normalized device coordinates
         // (-1 to +1) for both components
 
@@ -99,7 +102,7 @@ export class App {
         }
     }
     
-    onPointerDown( event ) {
+    onPointerDown(event: TouchEvent) {
         if (event.type == "touchstart") {
             const touch = event.touches[0];
 
@@ -115,7 +118,7 @@ export class App {
         this.onStartDrag(this.pointerPosition);
     }
     
-    onPointerUp( event ) {
+    onPointerUp(event: TouchEvent) {
         this.pointerIsDown = false;
         this.isFirstTouchFrame = false;
         

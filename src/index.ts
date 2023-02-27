@@ -1,7 +1,17 @@
 import { MusehumApp } from "./musehum-app"
 
-const app = new MusehumApp();
-document.body.appendChild(app.renderer.domElement);
+const canvasDomElement = document.getElementById("three-app");
+
+let app: MusehumApp;
+
+if (canvasDomElement) {
+    app = new MusehumApp(canvasDomElement);
+    // document.body.appendChild(app.renderer.domElement);
+}
+else {
+    app = new MusehumApp();
+}
+
 
 const nextlink = document.getElementById("next-link");
 if (nextlink) {
