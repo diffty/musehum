@@ -3,6 +3,7 @@ import { readTextFile } from "./utils";
 import { ArtefactBase } from "./artefactbase";
 import { ArtefactData } from "./artefactdata";
 import { StencilShutter } from "./stencilshutter";
+import { CheckerPlaneBg } from "./checker-plane-bg";
 
 
 export class ArtefactViewer extends THREE.Group {
@@ -12,9 +13,11 @@ export class ArtefactViewer extends THREE.Group {
     shutter: StencilShutter;
     currStencilId: number;
     rotateSpeed: number;
+    backgrounds: CheckerPlaneBg[];
 
     constructor(rotateSpeed?: number) {
         super();
+        this.backgrounds = [];
         this.artefacts = [];
         this.artefactsToLoad = 2;
         this.currStencilId = 1;
@@ -24,6 +27,19 @@ export class ArtefactViewer extends THREE.Group {
 
         this.shutter = new StencilShutter();
         this.add(this.shutter);
+
+        this.backgrounds.push(new CheckerPlaneBg());
+        this.backgrounds[0].setStencilId(1);
+        this.backgrounds[0].material.uniforms.color1.value = [1., 0., 1., 1.];
+        this.backgrounds[0].material.uniforms.color2.value = [0., 0., 0., 1.];
+        this.add(this.backgrounds[0]);
+
+        this.backgrounds.push(new CheckerPlaneBg());
+        this.backgrounds[1].setStencilId(2);
+        this.backgrounds[1].material.uniforms.color1.value = [0., 0., 0., 1.];
+        this.backgrounds[1].material.uniforms.color2.value = [1., 0., 0., 1.];
+        this.backgrounds[1].material.uniforms.cell.value = [1., 1.];
+        this.add(this.backgrounds[1]);
     }
 
     loadArtefactsDataFromUrl(url: string) {
@@ -90,6 +106,13 @@ export class ArtefactViewer extends THREE.Group {
 
     update(deltaTime: number) {
         this.shutter.update(deltaTime);
+        if (this.currArtefact) {
+            //this.currArtefact.update(deltaTime);
+        }
+
+        for (let i = 0; i < this.backgrounds.length; i++) {
+            this.backgrounds[i].update(deltaTime);
+        }
     }
 
     prevArtefact() {
@@ -153,5 +176,9 @@ export class ArtefactViewer extends THREE.Group {
 
         this.shutter.leftEdge.position.set(-ratio * 0.5, 0, 0);
         this.shutter.rightEdge.position.set(ratio * 0.5, 0, 0);
+
+        for (let i = 0; i < this.backgrounds.length; i++) {
+            this.backgrounds[i].onWindowResize();
+        }
     }
 }
