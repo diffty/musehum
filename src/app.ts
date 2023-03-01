@@ -33,7 +33,8 @@ export class App {
 
         this.renderer = new THREE.WebGLRenderer({
             canvas: canvasDomElement,
-            alpha: true
+            alpha: true,
+            antialias: true
         });
         this.renderer.setClearColor(0x000000, 0);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
