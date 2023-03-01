@@ -11,24 +11,12 @@ export class ArtefactBase extends THREE.Group {
     obj?: THREE.Group;
     loadingProgress: number;
     stencilId: number;
-    testBGMat: THREE.MeshBasicMaterial;
 
     constructor(artefactData: ArtefactData) {
         super()
         this.loadingProgress = 0;
         this.data = artefactData;
         this.stencilId = 0;
-
-        /*const testBGGeo = new THREE.PlaneGeometry();
-        this.testBGMat = new THREE.MeshBasicMaterial({color: new THREE.Color(randFloat(0, 1), randFloat(0, 1), randFloat(0, 1))});
-        const testBGMesh = new THREE.Mesh(testBGGeo, this.testBGMat);
-        
-        this.testBGMat.stencilWrite = true;
-        this.testBGMat.stencilRef = this.stencilId;
-        testBGMesh.scale.set(100, 100, 100);
-        testBGMesh.translateZ(-20);*/
-
-        //this.add(testBGMesh);
     }
 
     load(onLoadingEndCallback?: (artefact: ArtefactBase) => void) {
