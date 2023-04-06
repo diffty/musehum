@@ -4,4 +4,8 @@ export interface ArtefactData {
     author: string;
     description: string;
     shown: string;
+    color1: number[];
+    color2: number[];
+    color3: number[];
+    logo: number;
 }

@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "start": "parcel",
-        "build": "parcel build"
+        "build": "parcel build --public-url ./"
     },
     "dependencies": {
         "requirejs": "^2.3.6",

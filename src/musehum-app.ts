@@ -5,6 +5,8 @@ import { TextTransition } from "./text-transition"
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
+import { getUrlVars } from "./utils"
+
 
 export class MusehumApp extends App {
     rimLight: THREE.DirectionalLight;
@@ -20,10 +22,10 @@ export class MusehumApp extends App {
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 
-        //const orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
-        //orbitControls.mouseButtons = {
-        //    MIDDLE: THREE.MOUSE.ROTATE,
-        //}
+        const orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
+        orbitControls.mouseButtons = {
+            MIDDLE: THREE.MOUSE.ROTATE,
+        }
 
         this.rimLight = new THREE.DirectionalLight(0xFFFFFF, 1); // 1
         this.keyLight = new THREE.DirectionalLight(0xFFFFFF, 1); // 1
@@ -48,6 +50,8 @@ export class MusehumApp extends App {
 
         window.addEventListener('resize', () => { this.onWindowResize(); });
         window.addEventListener('keydown', (e) => { this.onKeyDown(e); });
+
+        console.log(getUrlVars());
     }
 
     update(deltaTime: number) {

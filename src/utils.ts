@@ -13,3 +13,13 @@ export function readTextFile(file, callback) {
     }
     rawFile.send(null);
 }
+
+
+
+export function getUrlVars() {
+    const vars = {};
+    const parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m,key,value) => {
+        vars[key] = value;
+    });
+    return vars;
+};

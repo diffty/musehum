@@ -3,7 +3,6 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 import { ArtefactData } from './artefactdata'
-import { randFloat, randInt } from "three/src/math/MathUtils";
 
 
 export class ArtefactBase extends THREE.Group {

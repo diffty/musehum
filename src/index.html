@@ -11,6 +11,41 @@
                 font-display: swap;
             }
 
+            @font-face {
+                font-family: 'Sonic Advanced 2';
+                src: url('./fonts/Sonic-Advanced-2.woff2') format('woff2'),
+                    url('./fonts/Sonic-Advanced-2.woff') format('woff');
+                font-weight: normal;
+                font-style: normal;
+                font-display: swap;
+            }
+
+            @font-face {
+                font-family: 'Sonic Genesis/Mega Drive Font';
+                src: url('./fonts/Sonic-GenesisMega-Drive-Font.woff2') format('woff2'),
+                    url('./fonts/Sonic-GenesisMega-Drive-Font.woff') format('woff');
+                font-weight: normal;
+                font-style: normal;
+                font-display: swap;
+            }
+
+            @font-face {
+                font-family: 'Sonic 1 Act Text';
+                src: url('./fonts/Sonic-1-Act-Text.woff2') format('woff2'),
+                    url('./fonts/Sonic-1-Act-Text.woff') format('woff');
+                font-weight: normal;
+                font-style: normal;
+                font-display: swap;
+            }
+
+            @font-face {
+                font-family: 'SRB2 OUTLINE';
+                src: url('./fonts/SRB2-OUTLINE.woff2') format('woff2'),
+                    url('./fonts/SRB2-OUTLINE.woff') format('woff');
+                font-weight: normal;
+                font-style: normal;
+                font-display: swap;
+            }
 
             body {
                 margin: 0;
@@ -19,14 +54,14 @@
             }
 
             #title {
-                font-family: 'Gaslight';
-                font-weight: bold;
-                font-size: 5em;
+                font-family: 'Sonic Advanced 2';
+                font-size: 7em;
                 position: absolute;
                 bottom: 0px;
-                margin: 0.2em;
+                margin: 0;
+                margin-left: 0.2em;
                 color: white;
-                filter: drop-shadow(3px 3px 0 rgb(128, 133, 0));
+                filter: drop-shadow(7px -7px 0px rgb(0, 0, 0, 0.9));
             }
 
             #sawside {
@@ -42,13 +77,12 @@
                 position: absolute;
                 bottom: 0px;
                 background-color: #ffff00;
-                filter: drop-shadow(3px 3px 5px #00000038);
-                filter: hue-rotate(40deg);
+                filter: drop-shadow(10px 0px 0px rgb(0, 0, 0, 0.9)) hue-rotate(40deg);
             }
 
             #three-app {
                 position: absolute;
-                filter: drop-shadow(5px 5px 15px #000000);
+                /*filter: drop-shadow(5px 5px 15px #000000);*/
             }
         </style>
         <link rel="stylesheet" type="text/css" href="./checker.css" />
@@ -56,10 +90,10 @@
     <body>
         <!--<a id="prev-link" href="#"><</a> <a id="next-link" href="#">></a>-->
 
-        <div id="wrap">
+        <!--<div id="wrap">
             <object id="checker" data="test.svg" type="image/svg+xml" style="display: none;""></object>
             <div id="checker"></div>
-        </div>
+        </div>-->
 
         <script src="./index.ts" type="module"></script>
         <canvas id="three-app"></canvas>

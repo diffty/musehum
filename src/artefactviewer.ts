@@ -4,6 +4,7 @@ import { ArtefactBase } from "./artefactbase";
 import { ArtefactData } from "./artefactdata";
 import { StencilShutter } from "./stencilshutter";
 import { CheckerPlaneBg } from "./checker-plane-bg";
+import { randInt } from "three/src/math/MathUtils";
 
 
 export class ArtefactViewer extends THREE.Group {
@@ -14,6 +15,8 @@ export class ArtefactViewer extends THREE.Group {
     currStencilId: number;
     rotateSpeed: number;
     backgrounds: CheckerPlaneBg[];
+    logoGridSize: number[];
+    nbLogo: number;
 
     constructor(rotateSpeed?: number) {
         super();
@@ -21,6 +24,8 @@ export class ArtefactViewer extends THREE.Group {
         this.artefacts = [];
         this.artefactsToLoad = 2;
         this.currStencilId = 1;
+        this.logoGridSize = [3, 3];
+        this.nbLogo = 9;
         this.rotateSpeed = (rotateSpeed != undefined) ? rotateSpeed : 5;
 
         this.loadArtefactsDataFromUrl("artefacts.json");
@@ -30,18 +35,15 @@ export class ArtefactViewer extends THREE.Group {
 
         this.backgrounds.push(new CheckerPlaneBg());
         this.backgrounds[0].setStencilId(1);
-        this.backgrounds[0].material.uniforms.color1.value = [1., 0., 1., 1.];
-        this.backgrounds[0].material.uniforms.color2.value = [0., 0., 0., 1.];
+        this.setBackgroundProperties(0, [0.1, 0.2, 0.7, 1.0], [1.0, 0.2, 0.7, 1.0], [1., 1.])
         this.add(this.backgrounds[0]);
 
         this.backgrounds.push(new CheckerPlaneBg());
         this.backgrounds[1].setStencilId(2);
-        this.backgrounds[1].material.uniforms.color1.value = [0., 0., 0., 1.];
-        this.backgrounds[1].material.uniforms.color2.value = [1., 0., 0., 1.];
-        this.backgrounds[1].material.uniforms.cell.value = [1., 1.];
+        this.setBackgroundProperties(1, [1.0, 1.0, 0.7, 1.0], [0.1, 0.2, 0.7, 1.0], [0., 0.])
         this.add(this.backgrounds[1]);
     }
-
+    
     loadArtefactsDataFromUrl(url: string) {
         readTextFile(url, (rawData) => {
             let data: Array<ArtefactData>;
@@ -97,11 +99,44 @@ export class ArtefactViewer extends THREE.Group {
 
         if (stencilId != undefined) {
             artefact.setStencilId(stencilId);
+            let color1 = artefact.data.color1;
+            let color2 = artefact.data.color2;
+            let logo = artefact.data.logo;
+
+            if (color1 == undefined) {
+                color1 = [1.0, 0.0, 0.0, 1.0];
+            }
+
+            if (color2 == undefined) {
+                color2 = [0.0, 1.0, 0.0, 1.0];
+            }
+
+            if (logo == undefined) {
+                logo = randInt(0, this.nbLogo-1);
+            }
+            
+            if (stencilId % 2 == 1) {
+                const tmpColorSwap = color1;
+                color1 = color2;
+                color2 = tmpColorSwap;
+            }
+
+            this.setBackgroundProperties(
+                stencilId-1,
+                color1,
+                color2,
+                this.logoGridPos(logo));
         }
     }
 
     hideArtefact(artefact: ArtefactBase) {
         artefact.visible = false;
+    }
+
+    logoGridPos(logoNb: number) {
+        const x = Math.floor(logoNb % this.logoGridSize[0]);
+        const y = Math.floor(logoNb / this.logoGridSize[0]);
+        return [x, y];
     }
 
     update(deltaTime: number) {
@@ -166,6 +201,26 @@ export class ArtefactViewer extends THREE.Group {
     onDrag(moveDelta: THREE.Vector2) {
         // this.shutter.setShutterPosition(this.shutter.getShutterPosition() + moveDelta.x);
         this.currArtefact.obj?.rotateY(moveDelta.x * this.rotateSpeed);
+    }
+
+    setBackgroundProperties(bgId: number, color1?: number[], color2?: number[], cell?: number[]) {
+        if (color1) {
+            while (color1.length < 4) {
+                color1.push(1.0);
+            }
+            this.backgrounds[bgId].material.uniforms.color1.value = color1;
+        }
+
+        if (color2) {
+            while (color2.length < 4) {
+                color2.push(1.0);
+            }
+            this.backgrounds[bgId].material.uniforms.color2.value = color2;
+        }
+
+        if (cell != undefined) {
+            this.backgrounds[bgId].material.uniforms.cell.value = cell;
+        }
     }
 
     onWindowResize() {
