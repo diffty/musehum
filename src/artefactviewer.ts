@@ -20,6 +20,7 @@ export class ArtefactViewer extends THREE.Group {
     loadingPercent: number;
     onLoaded: CallableFunction;
     onLoadProgressUpdate: CallableFunction;
+    interactable: boolean;
 
     constructor(rotateSpeed?: number) {
         super();
@@ -31,6 +32,7 @@ export class ArtefactViewer extends THREE.Group {
         this.nbLogo = 9;
         this.rotateSpeed = (rotateSpeed != undefined) ? rotateSpeed : 5;
         this.loadingPercent = 0.;
+        this.interactable = false;
 
         setTimeout( () => {
             this.loadArtefactsDataFromUrl("artefacts.json");
@@ -227,7 +229,9 @@ export class ArtefactViewer extends THREE.Group {
 
     onDrag(moveDelta: THREE.Vector2) {
         // this.shutter.setShutterPosition(this.shutter.getShutterPosition() + moveDelta.x);
-        this.currArtefact.obj?.rotateY(moveDelta.x * this.rotateSpeed);
+        if (this.interactable) {
+            this.currArtefact.obj?.rotateY(moveDelta.x * this.rotateSpeed);
+        }
     }
 
     setBackgroundProperties(bgId: number, color1?: number[], color2?: number[], cell?: number[]) {

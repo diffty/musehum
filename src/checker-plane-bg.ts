@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { ShaderMaterial } from "three";
+import * as TWEEN from "@tweenjs/tween.js"
 
 
 export class CheckerPlaneBg extends THREE.Mesh {
@@ -27,6 +28,7 @@ export class CheckerPlaneBg extends THREE.Mesh {
             uniform float speed;
             uniform float angle;
             uniform vec2 cell;
+            uniform float visibility;
 
             vec2 rotate(vec2 v, float angle) {
                 return mat2(cos(angle), -sin(angle), sin(angle), cos(angle)) * v;
@@ -65,7 +67,7 @@ export class CheckerPlaneBg extends THREE.Mesh {
                 float i = incrustImg(tex, c, mod(vUv2*2., 1.), vec2(3., 3.), cell);
                 c = c*(1.-i) + (1.-c)*i;
                 vec4 clr = color(c, color1, color2);
-                gl_FragColor.rgba = clr;
+                gl_FragColor.rgba = clr * visibility;
 			}
         `
 
@@ -78,7 +80,8 @@ export class CheckerPlaneBg extends THREE.Mesh {
                 'color1': { value: [0.1, 0.8, 0.2, 1.] },
                 'color2': { value: [0.1, 0., 0., 1.] },
                 'cell': { value: [0., 0.] },
-                'resolution': { value: [window.innerWidth, window.innerHeight] }
+                'resolution': { value: [window.innerWidth, window.innerHeight] },
+                'visibility': { value: 0.0 }
             },
             fragmentShader: bgFragmentShader,
             vertexShader: bgVertexShader,
@@ -117,6 +120,13 @@ export class CheckerPlaneBg extends THREE.Mesh {
         this.material.stencilWrite = true;
         this.material.stencilRef = this.stencilId;
         this.material.stencilFunc = THREE.EqualStencilFunc;
+    }
+
+    show() {
+        const t = new TWEEN.Tween(this.material.uniforms.visibility)
+            .to({value: 1.0}, 2000)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .start();
     }
 
     onWindowResize() {

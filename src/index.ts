@@ -15,10 +15,10 @@ else {
 
 const nextlink = document.getElementById("next-link");
 if (nextlink) {
-    nextlink.addEventListener("click", (e: Event) => { app.viewer.nextArtefact(); });
+    nextlink.addEventListener("click", (e: Event) => { app.nextArtefact(); });
 }
 
 const prevlink = document.getElementById("prev-link");
 if (prevlink) {
-    prevlink.addEventListener("click", (e: Event) => { app.viewer.prevArtefact(); });
+    prevlink.addEventListener("click", (e: Event) => { app.prevArtefact(); });
 }

@@ -70,6 +70,10 @@ export class MusehumApp extends App {
                 .to({intensity: 0.8}, 2000)
                 .easing(TWEEN.Easing.Quadratic.InOut) 
                 .start();
+            
+            this.viewer.interactable = true;
+
+            this.viewer.backgrounds.forEach((b) => { b.show()});
         };
         this.camera.translateZ(0.65);
 
@@ -97,15 +101,27 @@ export class MusehumApp extends App {
 
     onKeyDown(e) {
         if (e.keyCode == 37 || e.key == "ArrowLeft") {
-            this.viewer.prevArtefact();
-            this.textTransition.setText(this.viewer.currArtefact.data.author.toUpperCase());
+            this.prevArtefact();
         }
         else if (e.keyCode == 39 || e.key == "ArrowRight") {
-            this.viewer.nextArtefact();
+            this.nextArtefact();
+        }
+    }
+
+    prevArtefact() {
+        if (this.viewer.interactable) {
+            this.viewer.prevArtefact();
             this.textTransition.setText(this.viewer.currArtefact.data.author.toUpperCase());
         }
     }
 
+    nextArtefact() {
+        if (this.viewer.interactable) {
+            this.viewer.nextArtefact();
+            this.textTransition.setText(this.viewer.currArtefact.data.author.toUpperCase());
+        }
+    }
+    
     onWindowResize() {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
