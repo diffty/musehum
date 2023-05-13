@@ -123,11 +123,13 @@ export class StencilShutter extends THREE.Group {
     update(deltaTime: number) {
         const speed = 5;
 
+        if (deltaTime * speed > 1.) {
+            deltaTime = 1. / speed;
+        }
+
         const moveValue = (this.animTarget - this.animValue) * deltaTime * speed;
 
         if (Math.floor(this.animValue) != Math.floor(this.animValue + moveValue)) {
-            console.log(this.animValue);
-            console.log(moveValue);
             if (moveValue > 0) {
                 this.leftShadowIn.visible = true;
                 this.rightShadowIn.visible = false;
@@ -143,6 +145,7 @@ export class StencilShutter extends THREE.Group {
         }
 
         //this.translateX(moveValue);
+
         this.animValue += moveValue;
         
         if (Math.abs(this.animTarget - this.animValue) < 0.001) {
