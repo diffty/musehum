@@ -24,10 +24,10 @@ export class MusehumApp extends App {
 
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 
-        const orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
-        orbitControls.mouseButtons = {
-            MIDDLE: THREE.MOUSE.ROTATE,
-        }
+        //const orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
+        //orbitControls.mouseButtons = {
+        //    MIDDLE: THREE.MOUSE.ROTATE,
+        //}
 
         this.rimLight = new THREE.DirectionalLight(0xFFFFFF, 1); // 1
         this.keyLight = new THREE.DirectionalLight(0xFFFFFF, 0); // 1
@@ -60,12 +60,12 @@ export class MusehumApp extends App {
             this.textTransition.setText(this.viewer.artefacts[0].data.author)
 
             const tk = new TWEEN.Tween(this.keyLight)
-                .to({intensity: 1.0}, 300)
+                .to({intensity: 1.0}, 2000)
                 .easing(TWEEN.Easing.Quadratic.InOut) 
                 .start();
 
             const tf = new TWEEN.Tween(this.fillLight)
-                .to({intensity: 0.8}, 250)
+                .to({intensity: 0.8}, 2000)
                 .easing(TWEEN.Easing.Quadratic.InOut) 
                 .start();
         };
