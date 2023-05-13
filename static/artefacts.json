@@ -1,23 +1,74 @@
 [
     {
-        "id": "9e8a4e89a4",
+        "id": "diffty",
         "fileName": "diffty.gltf",
         "author": "DiFFtY",
         "description": "",
-        "shown": true
+        "shown": true,
+        "color1": [0.1, 0.5, 0.4],
+        "color2": [0.9, 0.5, 0.4]
     },
     {
-        "id": "879874e89a4",
+        "id": "peggy",
         "fileName": "peggy.gltf",
         "author": "Peggy",
         "description": "",
-        "shown": true
+        "shown": true,
+        "color1": [0.57, 0.32, 0.76],
+        "color2": [0.60, 0.96, 0.50]
     },
     {
-        "id": "9e8da4e89a4",
+        "id": "antwan",
         "fileName": "antwan.gltf",
         "author": "Antwan",
         "description": "",
-        "shown": true
+        "shown": true,
+        "color1": [0.4, 0.1, 0.2],
+        "color2": [0.1, 0.7, 0.8]
+    },
+    {
+        "id": "jarm0u",
+        "fileName": "jarm0u.gltf",
+        "author": "Jarm0u",
+        "description": "",
+        "shown": true,
+        "color1": [0.1, 0.5, 0.4],
+        "color2": [0.9, 0.5, 0.4]
+    },
+    {
+        "id": "myu",
+        "fileName": "myu.gltf",
+        "author": "MxMyu",
+        "description": "",
+        "shown": true,
+        "color1": [0.57, 0.32, 0.76],
+        "color2": [0.60, 0.96, 0.50]
+    },
+    {
+        "id": "danny",
+        "fileName": "danny.gltf",
+        "author": "Danny",
+        "description": "",
+        "shown": true,
+        "color1": [0.4, 0.1, 0.2],
+        "color2": [0.1, 0.7, 0.8]
+    },
+    {
+        "id": "lime",
+        "fileName": "lime.gltf",
+        "author": "Lime",
+        "description": "",
+        "shown": true,
+        "color1": [0.4, 0.1, 0.2],
+        "color2": [0.1, 0.7, 0.8]
+    },
+    {
+        "id": "quineapple",
+        "fileName": "quineapple.gltf",
+        "author": "Quineapple",
+        "description": "",
+        "shown": true,
+        "color1": [0.4, 0.1, 0.2],
+        "color2": [0.1, 0.7, 0.8]
     }
 ]
