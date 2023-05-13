@@ -83,6 +83,10 @@ export class ArtefactViewer extends THREE.Group {
                         if (a == this.currArtefact) {
                             this.showArtefact(a, this.currStencilId);
                         }
+                        else {
+                            a.setStencilId(99);
+                            a.visible = true;
+                        }
                         nbLoadedArtefacts++;
                         this.loadingPercent = nbLoadedArtefacts / this.artefacts.length;
                         console.log(this.loadingPercent);
