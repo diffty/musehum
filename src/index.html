@@ -47,6 +47,15 @@
                 font-display: swap;
             }
 
+            @keyframes slidein {
+                from { margin-bottom: -100%; }
+                to { margin-bottom: 0%; }
+            }
+
+            html, body {
+                margin: 0; height: 100%; overflow: hidden;
+            }
+
             body {
                 margin: 0;
                 touch-action: none;
@@ -78,6 +87,7 @@
                 bottom: 0px;
                 background-color: #ffff00;
                 filter: drop-shadow(10px 0px 0px rgb(0, 0, 0, 0.9)) hue-rotate(40deg);
+                animation: 1s ease-in-out 0s slidein;
             }
 
             #three-app {
@@ -97,6 +107,7 @@
                 top: 40%;
             }
 
+            
         </style>
         <link rel="stylesheet" type="text/css" href="./checker.css" />
     </head>

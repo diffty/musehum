@@ -47,6 +47,8 @@ export class MusehumApp extends App {
         this.scene.add(this.viewer);
 
         this.textTransition = new TextTransition();
+        this.textTransition.setText(`0% LOADED`, true)
+
         this.viewer.onLoadProgressUpdate = (progressPercent: number) => {
             this.textTransition.setText(`${Math.round(progressPercent*100.)}% LOADED`, true)
 

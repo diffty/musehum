@@ -32,8 +32,10 @@ export class ArtefactViewer extends THREE.Group {
         this.rotateSpeed = (rotateSpeed != undefined) ? rotateSpeed : 5;
         this.loadingPercent = 0.;
 
-        this.loadArtefactsDataFromUrl("artefacts.json");
-
+        setTimeout( () => {
+            this.loadArtefactsDataFromUrl("artefacts.json");
+        }, 1000 );
+        
         this.shutter = new StencilShutter();
         this.add(this.shutter);
 
