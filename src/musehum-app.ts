@@ -7,6 +7,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 import { getUrlVars } from "./utils"
 
+import * as TWEEN from '@tweenjs/tween.js'
+
 
 export class MusehumApp extends App {
     rimLight: THREE.DirectionalLight;
@@ -28,8 +30,8 @@ export class MusehumApp extends App {
         }
 
         this.rimLight = new THREE.DirectionalLight(0xFFFFFF, 1); // 1
-        this.keyLight = new THREE.DirectionalLight(0xFFFFFF, 1); // 1
-        this.fillLight = new THREE.DirectionalLight(0xFFFFFF, 0.8); // 1
+        this.keyLight = new THREE.DirectionalLight(0xFFFFFF, 0); // 1
+        this.fillLight = new THREE.DirectionalLight(0xFFFFFF, 0); // 1
         this.ambLight = new THREE.AmbientLight(0xFFFFFF, 0);   // 0.8
         
         this.rimLight.position.set(-5, 0, -3);
@@ -45,7 +47,28 @@ export class MusehumApp extends App {
         this.scene.add(this.viewer);
 
         this.textTransition = new TextTransition();
+        this.viewer.onLoadProgressUpdate = (progressPercent: number) => {
+            this.textTransition.setText(`${Math.round(progressPercent*100.)}% LOADED`, true)
 
+            const tr = new TWEEN.Tween(this.rimLight)
+                .to({intensity: progressPercent}, 300)
+                .easing(TWEEN.Easing.Quadratic.InOut) 
+                .start();
+
+        }
+        this.viewer.onLoaded = () => {
+            this.textTransition.setText(this.viewer.artefacts[0].data.author)
+
+            const tk = new TWEEN.Tween(this.keyLight)
+                .to({intensity: 1.0}, 300)
+                .easing(TWEEN.Easing.Quadratic.InOut) 
+                .start();
+
+            const tf = new TWEEN.Tween(this.fillLight)
+                .to({intensity: 0.8}, 250)
+                .easing(TWEEN.Easing.Quadratic.InOut) 
+                .start();
+        };
         this.camera.translateZ(0.65);
 
         window.addEventListener('resize', () => { this.onWindowResize(); });
@@ -63,6 +86,7 @@ export class MusehumApp extends App {
                 titleDomElement.textContent = this.textTransition.getBuffer();
             }
         }
+        TWEEN.update();
     }
 
     onDrag(moveDelta: THREE.Vector2): void {

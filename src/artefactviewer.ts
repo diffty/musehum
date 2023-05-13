@@ -17,6 +17,9 @@ export class ArtefactViewer extends THREE.Group {
     backgrounds: CheckerPlaneBg[];
     logoGridSize: number[];
     nbLogo: number;
+    loadingPercent: number;
+    onLoaded: CallableFunction;
+    onLoadProgressUpdate: CallableFunction;
 
     constructor(rotateSpeed?: number) {
         super();
@@ -27,6 +30,7 @@ export class ArtefactViewer extends THREE.Group {
         this.logoGridSize = [3, 3];
         this.nbLogo = 9;
         this.rotateSpeed = (rotateSpeed != undefined) ? rotateSpeed : 5;
+        this.loadingPercent = 0.;
 
         this.loadArtefactsDataFromUrl("artefacts.json");
 
@@ -64,6 +68,10 @@ export class ArtefactViewer extends THREE.Group {
             this.artefacts.push(newArtefact);
         });
 
+        this.loadingPercent = 0.;
+
+        var nbLoadedArtefacts = 0;
+
         if (this.artefacts.length > 0) {
             this.currArtefact = this.artefacts[0]
             
@@ -75,7 +83,20 @@ export class ArtefactViewer extends THREE.Group {
                         if (a == this.currArtefact) {
                             this.showArtefact(a, this.currStencilId);
                         }
+                        nbLoadedArtefacts++;
+                        this.loadingPercent = nbLoadedArtefacts / this.artefacts.length;
+                        console.log(this.loadingPercent);
                         //this.showArtefact(a, (i % 2) + 1); // Attention on affiche tout là
+
+                        if (this.onLoadProgressUpdate) {
+                            this.onLoadProgressUpdate(this.loadingPercent);
+                        }
+
+                        if (this.loadingPercent == 1.) {
+                            if (this.onLoaded) {
+                                this.onLoaded();
+                            }
+                        }
                     });
             }
         }

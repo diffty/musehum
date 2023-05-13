@@ -18,14 +18,22 @@ export class TextTransition {
         this.bufferB = "";
         this.currBuffer = [];
         this.currMask = [];
-        this.tickRate = 100;
+        this.tickRate = 25;
         this.lastTickTime = 0;
     }
 
-    setText(newText: string) {
-        this.bufferA = this.currBuffer.join("");
-        this.bufferB = newText;
-        this.currMask = ('A'.repeat(this.bufferA.length) + '?'.repeat(Math.max(0, this.bufferB.length-this.bufferA.length)) + 'X'.repeat(Math.max(0, this.bufferA.length-this.bufferB.length))).split("");
+    setText(newText: string, noTransition?: boolean) {
+        if (noTransition == true) {
+            this.bufferA = newText;
+            this.bufferB = newText;
+            this.currBuffer = this.bufferA.split("");
+            this.currMask = ('A'.repeat(this.bufferA.length) + '?'.repeat(Math.max(0, this.bufferB.length-this.bufferA.length)) + 'X'.repeat(Math.max(0, this.bufferA.length-this.bufferB.length))).split("");
+        }
+        else {
+            this.bufferA = this.currBuffer.join("");
+            this.bufferB = newText;
+            this.currMask = ('A'.repeat(this.bufferA.length) + '?'.repeat(Math.max(0, this.bufferB.length-this.bufferA.length)) + 'X'.repeat(Math.max(0, this.bufferA.length-this.bufferB.length))).split("");
+        }
         this.enabled = true;
     }
 
