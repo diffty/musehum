@@ -3,15 +3,6 @@
         <title>Musehum</title>
         <style>
             @font-face {
-                font-family: 'Gaslight';
-                src: url('./fonts/Gaslight.woff2') format('woff2'),
-                    url('./fonts/Gaslight.woff') format('woff');
-                font-weight: 100;
-                font-style: normal;
-                font-display: swap;
-            }
-
-            @font-face {
                 font-family: 'Sonic Advanced 2';
                 src: url('./fonts/Sonic-Advanced-2.woff2') format('woff2'),
                     url('./fonts/Sonic-Advanced-2.woff') format('woff');
@@ -20,36 +11,29 @@
                 font-display: swap;
             }
 
-            @font-face {
-                font-family: 'Sonic Genesis/Mega Drive Font';
-                src: url('./fonts/Sonic-GenesisMega-Drive-Font.woff2') format('woff2'),
-                    url('./fonts/Sonic-GenesisMega-Drive-Font.woff') format('woff');
-                font-weight: normal;
-                font-style: normal;
-                font-display: swap;
-            }
-
-            @font-face {
-                font-family: 'Sonic 1 Act Text';
-                src: url('./fonts/Sonic-1-Act-Text.woff2') format('woff2'),
-                    url('./fonts/Sonic-1-Act-Text.woff') format('woff');
-                font-weight: normal;
-                font-style: normal;
-                font-display: swap;
-            }
-
-            @font-face {
-                font-family: 'SRB2 OUTLINE';
-                src: url('./fonts/SRB2-OUTLINE.woff2') format('woff2'),
-                    url('./fonts/SRB2-OUTLINE.woff') format('woff');
-                font-weight: normal;
-                font-style: normal;
-                font-display: swap;
-            }
-
             @keyframes slidein {
                 from { margin-bottom: -100%; }
                 to { margin-bottom: 0%; }
+            }
+
+            @keyframes bounce {
+                from { width: 150px; }
+                to { width: 100px; }
+            }
+
+            @keyframes hoverspin {
+                from { rotate: -20deg; }
+                to { rotate: 20deg; }
+            }
+
+            @keyframes hovermegaspin {
+                from { rotate: 0deg; }
+                to { rotate: 1080deg; }
+            }
+
+            @keyframes hoverzoom {
+                from {  scale: 80%; }
+                to { scale: 120%; }
             }
 
             html, body {
@@ -94,6 +78,29 @@
                 position: absolute;
                 /*filter: drop-shadow(5px 5px 15px #000000);*/
             }
+            
+            #prev-link img, #next-link img {
+                width: 150px;
+                height: 100px;
+                animation: 1s ease-out 0s bounce infinite alternate;
+            }
+
+            
+            #prev-link img:hover, #next-link img:hover {
+                animation:
+                    0.3s ease-out 0s hoverzoom infinite alternate,
+                    0.5s ease-in-out 0s hoverspin infinite alternate;
+            }
+
+            #prev-link img:active, #next-link img:active {
+                animation:
+                    1s ease-out 0s hovermegaspin;
+            }
+
+            #prev-link img:active:hover, #next-link img:active:hover {
+                animation:
+                    1s ease-out 0s hovermegaspin;
+            }
 
             #prev-link {
                 position: absolute;
@@ -126,6 +133,7 @@
             <pre id="title"></pre>
         </div>
 
-        <a id="prev-link" href="#"><</a> <a id="next-link" href="#">></a>
+        <a id="prev-link" href="#"><img src="./btn-prev.png"/></a>
+        <a id="next-link" href="#"><img src="./btn-next.png"/></a>
     </body>
 </html>

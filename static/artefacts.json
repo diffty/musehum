@@ -9,15 +9,6 @@
         "color2": [0.9, 0.5, 0.4]
     },
     {
-        "id": "peggy",
-        "fileName": "peggy.gltf",
-        "author": "Peggy",
-        "description": "",
-        "shown": true,
-        "color1": [0.57, 0.32, 0.76],
-        "color2": [0.60, 0.96, 0.50]
-    },
-    {
         "id": "antwan",
         "fileName": "antwan.gltf",
         "author": "Antwan",
@@ -32,8 +23,8 @@
         "author": "Jarm0u",
         "description": "",
         "shown": true,
-        "color1": [0.1, 0.5, 0.4],
-        "color2": [0.9, 0.5, 0.4]
+        "color1": [0.57, 0.32, 0.76],
+        "color2": [0.60, 0.96, 0.50]
     },
     {
         "id": "myu",
@@ -41,8 +32,17 @@
         "author": "MxMyu",
         "description": "",
         "shown": true,
-        "color1": [0.57, 0.32, 0.76],
-        "color2": [0.60, 0.96, 0.50]
+        "color1": [0.1, 0.5, 0.4],
+        "color2": [0.9, 0.5, 0.4]
+    },
+    {
+        "id": "kit",
+        "fileName": "kit.gltf",
+        "author": "Kit",
+        "description": "",
+        "shown": true,
+        "color1": [0.4, 0.1, 0.2],
+        "color2": [0.1, 0.7, 0.8]
     },
     {
         "id": "danny",
@@ -50,8 +50,8 @@
         "author": "Danny",
         "description": "",
         "shown": true,
-        "color1": [0.4, 0.1, 0.2],
-        "color2": [0.1, 0.7, 0.8]
+        "color1": [0.57, 0.32, 0.76],
+        "color2": [0.60, 0.96, 0.50]
     },
     {
         "id": "lime",
@@ -59,13 +59,58 @@
         "author": "Lime",
         "description": "",
         "shown": true,
-        "color1": [0.4, 0.1, 0.2],
-        "color2": [0.1, 0.7, 0.8]
+        "color1": [0.1, 0.5, 0.4],
+        "color2": [0.9, 0.5, 0.4]
     },
     {
         "id": "quineapple",
         "fileName": "quineapple.gltf",
         "author": "Quineapple",
+        "description": "",
+        "shown": true,
+        "color1": [0.4, 0.1, 0.2],
+        "color2": [0.1, 0.7, 0.8]
+    },
+    {
+        "id": "peggy",
+        "fileName": "peggy.gltf",
+        "author": "Peggy",
+        "description": "",
+        "shown": true,
+        "color1": [0.57, 0.32, 0.76],
+        "color2": [0.60, 0.96, 0.50]
+    },
+    {
+        "id": "goonie",
+        "fileName": "goonie.gltf",
+        "author": "Goonie",
+        "description": "",
+        "shown": true,
+        "color1": [0.1, 0.5, 0.4],
+        "color2": [0.9, 0.5, 0.4]
+    },
+    {
+        "id": "sweetberry",
+        "fileName": "sweetberry.gltf",
+        "author": "Sweetberry",
+        "description": "",
+        "shown": true,
+        "color1": [0.4, 0.1, 0.2],
+        "color2": [0.1, 0.7, 0.8]
+    },
+    {
+        "id": "cyan",
+        "fileName": "cyan.gltf",
+        "author": "Cyan",
+        "description": "",
+        "shown": true,
+        "color1": [0.57, 0.32, 0.76],
+        "color2": [0.60, 0.96, 0.50]
+    },
+    {
+        "id": "karmalama",
+        "fileName": "karmalama.gltf",
+        "author": "Karmalama",
         "description": "",
         "shown": true,
         "color1": [0.4, 0.1, 0.2],
